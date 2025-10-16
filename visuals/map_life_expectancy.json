@@ -1,64 +1,17 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 900,
-  "height": 650,
-  "title": {
-    "text": "Life Expectancy at Birth by SA4 Region (2021–2023)",
-    "font": "Montserrat",
-    "fontSize": 22,
-    "color": "#00558c",
-    "anchor": "middle"
-  },
-  "projection": {"type": "mercator"},
-  "params": [
-    {
-      "name": "sexParam",
-      "value": "Average",
-      "bind": {
-        "input": "select",
-        "options": ["Average", "Male", "Female"],
-        "name": "Select: "
-      }
-    }
-  ],
+  "width": 800,
+  "height": 700,
+  "title": "SA4 Geometry Test (GeoJSON Sanity Check)",
   "data": {
     "url": "https://raw.githubusercontent.com/Emoo0020/fit3179-dv2-life-expectancy/main/data/SA4_2021_AUST_GDA2020_simplified.geojson",
-    "format": {"type": "geojson"}
+    "format": { "type": "geojson" }
   },
-  "transform": [
-    {
-      "lookup": "properties.SA4_NAME21",
-      "from": {
-        "data": {
-          "url": "https://raw.githubusercontent.com/Emoo0020/fit3179-dv2-life-expectancy/main/data/life_expectancy_sa4_2021_2023.csv",
-          "format": {"type": "csv"}
-        },
-        "key": "SA4_NAME21",
-        "fields": ["Male", "Female", "Average"]
-      }
-    },
-    {
-      "calculate": "sexParam == 'Male' ? datum.Male : (sexParam == 'Female' ? datum.Female : datum.Average)",
-      "as": "LE_selected"
-    }
-  ],
-  "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.3, "fill": "#68a0cf"},
-  "encoding": {
-    "color": {
-      "field": "LE_selected",
-      "type": "quantitative",
-      "scale": {"scheme": "blues"},
-      "legend": {"title": "Life Expectancy (Years)"}
-    },
-    "tooltip": [
-      {"field": "properties.SA4_NAME21", "type": "nominal", "title": "SA4 Region"},
-      {"field": "Male", "type": "quantitative", "title": "Male", "format": ".1f"},
-      {"field": "Female", "type": "quantitative", "title": "Female", "format": ".1f"},
-      {"field": "Average", "type": "quantitative", "title": "Average", "format": ".1f"}
-    ]
+  "mark": {
+    "type": "geoshape",
+    "stroke": "white",
+    "strokeWidth": 0.5,
+    "fill": "#68a0cf"
   },
-  "config": {
-    "view": {"stroke": "transparent"},
-    "background": "#f7f7f7"
-  }
+  "projection": { "type": "mercator" }
 }
