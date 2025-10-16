@@ -41,7 +41,7 @@
       "as": "LE_selected"
     }
   ],
-  "mark": {"type": "geoshape"},
+  "mark": {"type": "geoshape","stroke":"#888","strokeWidth":0.2},
   "encoding": {
     "color": {
       "field": "LE_selected",
