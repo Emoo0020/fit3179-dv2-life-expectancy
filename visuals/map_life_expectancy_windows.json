@@ -1,0 +1,92 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "title": {
+    "text": "Life Expectancy at Birth by SA4 (Rolling 3-year windows)",
+    "subtitle": "Compare 2016–2018, 2017–2019, 2018–2020, 2019–2021, 2020–2022, 2021–2023",
+    "anchor": "middle",
+    "font": "Montserrat",
+    "fontSize": 20,
+    "color": "#004c80"
+  },
+
+  "params": [
+    {
+      "name": "win",
+      "value": "2021_2023",
+      "bind": {
+        "input": "radio",
+        "options": ["2016_2018", "2017_2019", "2018_2020", "2019_2021", "2020_2022", "2021_2023"],
+        "labels": ["2016–2018", "2017–2019", "2018–2020", "2019–2021", "2020–2022", "2021–2023"],
+        "name": "Window: "
+      }
+    },
+    {
+      "name": "hl",
+      "select": { "type": "point", "on": "mouseover" }
+    }
+  ],
+
+  "projection": { "type": "mercator", "center": [133, -27], "scale": 900 },
+
+  "width": "container",
+  "height": 520,
+  "autosize": { "type": "fit", "contains": "padding" },
+
+  "layer": [
+    {
+      "data": {
+        "url": "data/SA4_2021_AUST_GDA2020.json",
+        "format": { "type": "topojson", "feature": "sa4_2021_simplified" }
+      },
+      "mark": { "type": "geoshape", "fill": "#f3f4f6", "stroke": "#ffffff", "strokeWidth": 0.8 }
+    },
+    {
+      "data": { "url": "data/life_expectancy_sa4_2016_2023.csv" },
+      "transform": [
+        {
+          "lookup": "SA4_NAME21",
+          "from": {
+            "data": {
+              "url": "data/SA4_2021_AUST_GDA2020.json",
+              "format": { "type": "topojson", "feature": "sa4_2021_simplified" }
+            },
+            "key": "properties.SA4_NAME21"
+          },
+          "as": "geo"
+        },
+        { "calculate": "toNumber(datum['le_' + win])", "as": "le" }
+      ],
+      "mark": { "type": "geoshape" },
+      "encoding": {
+        "shape": { "field": "geo", "type": "geojson" },
+        "color": {
+          "field": "le",
+          "type": "quantitative",
+          "scale": { "scheme": { "name": "blues", "extent": [0.2, 1] } },
+          "legend": {
+            "title": "Life Expectancy (years)",
+            "orient": "bottom",
+            "gradientLength": 340,
+            "labelFontSize": 11,
+            "titleFontSize": 13
+          }
+        },
+        "stroke": { "value": "#ffffff" },
+        "strokeWidth": {
+          "condition": [{ "param": "hl", "empty": false, "value": 2 }],
+          "value": 0.6
+        },
+        "tooltip": [
+          { "field": "SA4_NAME21", "title": "Region" },
+          { "field": "le", "title": "Life Expectancy", "format": ".1f" }
+        ]
+      }
+    }
+  ],
+
+  "config": {
+    "view": { "stroke": "transparent" },
+    "axis": { "labelFontSize": 12, "titleFontSize": 13 }
+  }
+}
