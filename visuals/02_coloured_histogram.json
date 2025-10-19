@@ -1,0 +1,85 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 720,
+  "height": 380,
+  "title": "Life expectancy (persons, 2021–2023 avg) — distribution across SA4 regions",
+  "data": {
+    "url": "https://raw.githubusercontent.com/Emoo0020/fit3179-dv2-life-expectancy/main/data/final_sa4_lifeexp_mortality.csv",
+    "format": {"type": "csv"}
+  },
+  "transform": [
+    {"calculate": "toNumber(datum.persons_LE)", "as": "le"},
+    {"calculate": "toNumber(datum.mort_age_std_rate_per100k)", "as": "mort"},
+    {"filter": "isValid(datum.le)"},
+    {"bin": {"maxbins": 25}, "field": "le", "as": ["LE_bin", "LE_bin_end"]},
+    {
+      "aggregate": [
+        {"op": "count", "as": "regions"},
+        {"op": "mean", "field": "mort", "as": "avg_mort_rate"}
+      ],
+      "groupby": ["LE_bin", "LE_bin_end"]
+    },
+    {
+      "joinaggregate": [
+        {"op": "sum", "field": "regions", "as": "total_regions"}
+      ]
+    },
+    {"calculate": "datum.regions / datum.total_regions", "as": "share"}
+  ],
+  "layer": [
+    {
+      "mark": {"type": "bar", "cornerRadiusEnd": 2},
+      "encoding": {
+        "x": {
+          "field": "LE_bin",
+          "type": "quantitative",
+          "bin": "binned",
+          "axis": {
+            "title": "Life expectancy at birth (years, persons)",
+            "labelFlush": true
+          }
+        },
+        "x2": {"field": "LE_bin_end"},
+        "y": {
+          "field": "regions",
+          "type": "quantitative",
+          "title": "Number of SA4 regions",
+          "stack": null
+        },
+        "color": {
+          "field": "avg_mort_rate",
+          "type": "quantitative",
+          "title": "Avg age-std mortality (per 100k)",
+          "legend": {"orient": "right"}
+        },
+        "tooltip": [
+          {
+            "field": "LE_bin",
+            "title": "Bin start",
+            "type": "quantitative",
+            "format": ".1f"
+          },
+          {
+            "field": "LE_bin_end",
+            "title": "Bin end",
+            "type": "quantitative",
+            "format": ".1f"
+          },
+          {"field": "regions", "title": "Regions"},
+          {
+            "field": "share",
+            "title": "Share of regions",
+            "type": "quantitative",
+            "format": ".0%"
+          },
+          {
+            "field": "avg_mort_rate",
+            "title": "Avg age-std mortality (per 100k)",
+            "format": ".1f"
+          }
+        ]
+      }
+    }
+  ],
+  "config": {}
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 700,
+  "height": 420,
+  "title": "Top 10 SA4s by age-standardised mortality (per 100k, worst first)",
+  "data": {
+    "url": "https://raw.githubusercontent.com/Emoo0020/fit3179-dv2-life-expectancy/refs/heads/main/data/final_sa4_lifeexp_mortality.csv"
+  },
+  "transform": [
+    {
+      "window": [{"op": "rank", "as": "r"}],
+      "sort": [{"field": "mort_age_std_rate_per100k", "order": "descending"}]
+    },
+    {"filter": "datum.r <= 10"}
+  ],
+  "mark": {"type": "bar", "tooltip": true},
+  "encoding": {
+    "y": {"field": "SA4_name", "type": "nominal", "sort": "-x", "title": null},
+    "x": {
+      "field": "mort_age_std_rate_per100k",
+      "type": "quantitative",
+      "title": "Age-standardised mortality (per 100k)"
+    },
+    "tooltip": [
+      {"field": "SA4_name", "title": "Region"},
+      {
+        "field": "mort_age_std_rate_per100k",
+        "title": "Mortality (per 100k)",
+        "format": ".1f"
+      },
+      {"field": "persons_LE", "title": "LE (persons)", "format": ".1f"}
+    ]
+  },
+  "config": {}
+}

@@ -1,0 +1,77 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 720,
+  "height": 420,
+  "title": "Higher life expectancy ↔ lower age-standardised mortality (per 100 k)",
+  "data": {
+    "url": "https://raw.githubusercontent.com/Emoo0020/fit3179-dv2-life-expectancy/refs/heads/main/data/final_sa4_lifeexp_mortality.csv"
+  },
+  "layer": [
+    {
+      "params": [{"name": "brushSel", "select": {"type": "interval"}}],
+      "mark": {"type": "point", "filled": true, "size": 70, "opacity": 0.8},
+      "encoding": {
+        "x": {
+          "field": "persons_LE",
+          "type": "quantitative",
+          "title": "Life expectancy (yrs, persons)",
+          "scale": {"domain": [74, 88]}
+        },
+        "y": {
+          "field": "mort_age_std_rate_per100k",
+          "type": "quantitative",
+          "title": "Age-standardised mortality (per 100 k)",
+          "scale": {"domain": [350, 1000]}
+        },
+        "color": {
+          "condition": {"param": "brushSel", "value": "#3b82f6"},
+          "value": "#cbd5e1"
+        },
+        "tooltip": [
+          {"field": "SA4_name", "title": "Region"},
+          {"field": "persons_LE", "title": "LE (persons)", "format": ".1f"},
+          {"field": "male_LE", "title": "LE (male)", "format": ".1f"},
+          {"field": "female_LE", "title": "LE (female)", "format": ".1f"},
+          {
+            "field": "mort_age_std_rate_per100k",
+            "title": "Mortality (age-std per 100 k)",
+            "format": ".1f"
+          },
+          {
+            "field": "mort_crude_rate_per100k",
+            "title": "Mortality (crude per 100 k)",
+            "format": ".1f"
+          },
+          {
+            "field": "mort_median_age",
+            "title": "Median age at death",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "regression": "mort_age_std_rate_per100k",
+          "on": "persons_LE",
+          "as": ["LE", "mort_line"]
+        }
+      ],
+      "mark": {"type": "line", "color": "#ef4444", "strokeWidth": 2},
+      "encoding": {
+        "x": {
+          "field": "LE",
+          "type": "quantitative",
+          "scale": {"domain": [74, 88]}
+        },
+        "y": {
+          "field": "mort_line",
+          "type": "quantitative",
+          "scale": {"domain": [350, 1000]}
+        }
+      }
+    }
+  ],
+  "config": {}
+}

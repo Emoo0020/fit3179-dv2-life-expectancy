@@ -1,0 +1,49 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 720,
+  "height": 400,
+  "title": {
+    "text": "Distribution of Average Life Expectancy Across Australian SA4 Regions (2021–2023)",
+    "font": "Montserrat",
+    "fontSize": 16,
+    "color": "#004c80"
+  },
+  "data": {
+    "url": "https://raw.githubusercontent.com/Emoo0020/fit3179-dv2-life-expectancy/main/data/life_expectancy_sa4_2021_2023.csv"
+  },
+  "transform": [
+    {"calculate": "toNumber(datum.Average)", "as": "AvgNum"},
+    {"filter": "isValid(datum.AvgNum)"}
+  ],
+  "mark": {"type": "bar", "color": "#4c78a8", "tooltip": true},
+  "encoding": {
+    "x": {
+      "field": "AvgNum",
+      "bin": {"maxbins": 25},
+      "title": "Average Life Expectancy (years)",
+      "axis": {"tickCount": 10, "labelAngle": 0}
+    },
+    "y": {
+      "aggregate": "count",
+      "title": "Number of SA4 Regions",
+      "axis": {"grid": true}
+    },
+    "tooltip": [
+      {
+        "field": "bin_maxbins_25_AvgNum",
+        "title": "Lower bound",
+        "format": ".1f"
+      },
+      {
+        "field": "bin_maxbins_25_AvgNum_end",
+        "title": "Upper bound",
+        "format": ".1f"
+      },
+      {"aggregate": "count", "title": "Number of SA4 Regions"}
+    ]
+  },
+  "config": {
+    "view": {"stroke": "transparent"},
+    "axis": {"labelFont": "Montserrat", "titleFont": "Montserrat"}
+  }
+}

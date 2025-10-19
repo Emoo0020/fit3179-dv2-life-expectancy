@@ -1,0 +1,46 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Where do SA4s fall? Life expectancy vs age-std mortality",
+  "width": 660,
+  "height": 460,
+  "params": [{"name": "box", "select": {"type": "interval"}}],
+  "data": {
+    "url": "https://raw.githubusercontent.com/Emoo0020/fit3179-dv2-life-expectancy/main/data/final_sa4_lifeexp_mortality.csv"
+  },
+  "transform": [
+    {
+      "filter": "isValid(datum.persons_LE) && isValid(datum.mort_age_std_rate_per100k)"
+    },
+    {"bin": {"maxbins": 20}, "field": "persons_LE", "as": "le_b"},
+    {
+      "bin": {"maxbins": 20},
+      "field": "mort_age_std_rate_per100k",
+      "as": "mr_b"
+    },
+    {
+      "aggregate": [{"op": "count", "as": "n"}],
+      "groupby": ["le_b", "le_b_end", "mr_b", "mr_b_end"]
+    }
+  ],
+  "mark": "rect",
+  "encoding": {
+    "x": {"field": "le_b", "bin": "binned", "title": "Life expectancy (yrs)"},
+    "x2": {"field": "le_b_end"},
+    "y": {
+      "field": "mr_b",
+      "bin": "binned",
+      "title": "Age-std mortality (per 100k)"
+    },
+    "y2": {"field": "mr_b_end"},
+    "color": {"field": "n", "type": "quantitative", "title": "SA4 count"},
+    "opacity": {"condition": {"param": "box", "value": 1}, "value": 0.35},
+    "tooltip": [
+      {"field": "le_b", "title": "LE from", "format": ".1f"},
+      {"field": "le_b_end", "title": "LE to", "format": ".1f"},
+      {"field": "mr_b", "title": "Mort from", "format": ".0f"},
+      {"field": "mr_b_end", "title": "Mort to", "format": ".0f"},
+      {"field": "n", "title": "SA4s"}
+    ]
+  },
+  "config": {}
+}

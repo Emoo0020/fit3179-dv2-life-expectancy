@@ -1,0 +1,108 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "url": "https://raw.githubusercontent.com/Emoo0020/fit3179-dv2-life-expectancy/main/data/final_sa4_lifeexp_mortality.csv",
+    "format": {"type": "csv"}
+  },
+  "transform": [
+    {"calculate": "toNumber(datum.persons_LE)", "as": "LE"},
+    {
+      "calculate": "toNumber(datum.mort_age_std_rate_per100k)",
+      "as": "Mortality"
+    },
+    {"filter": "isValid(datum.LE) && isValid(datum.Mortality)"}
+  ],
+  "vconcat": [
+    {
+      "width": 750,
+      "height": 460,
+      "title": {
+        "text": "Life expectancy vs age-std mortality — brush to see selected distribution",
+        "font": "Montserrat",
+        "fontSize": 16,
+        "fontWeight": 600,
+        "color": "#004c80"
+      },
+      "params": [{"name": "brush", "select": {"type": "interval"}}],
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "color": "#4c78a8",
+        "opacity": 0.8,
+        "size": 70
+      },
+      "encoding": {
+        "x": {
+          "field": "LE",
+          "type": "quantitative",
+          "title": "Life expectancy (yrs, persons)",
+          "scale": {"domain": [78, 90]}
+        },
+        "y": {
+          "field": "Mortality",
+          "type": "quantitative",
+          "title": "Age-std mortality (per 100k)",
+          "scale": {"domainMin": 300}
+        },
+        "tooltip": [
+          {"field": "SA4_name", "title": "Region"},
+          {"field": "LE", "title": "Life Expectancy", "format": ".1f"},
+          {"field": "Mortality", "title": "Mortality", "format": ".1f"}
+        ]
+      }
+    },
+    {
+      "hconcat": [
+        {
+          "transform": [{"filter": {"param": "brush"}}],
+          "mark": {"type": "bar", "color": "#4c78a8", "opacity": 0.8},
+          "encoding": {
+            "x": {
+              "field": "Mortality",
+              "bin": {"maxbins": 15},
+              "title": "Age-std mortality"
+            },
+            "y": {"aggregate": "count", "title": "SA4 count"}
+          },
+          "width": 340,
+          "height": 230,
+          "title": {
+            "text": "Selected mortality",
+            "font": "Montserrat",
+            "fontSize": 14,
+            "anchor": "middle"
+          }
+        },
+        {
+          "mark": {"type": "bar", "color": "#9ecae1", "opacity": 0.8},
+          "encoding": {
+            "x": {
+              "field": "Mortality",
+              "bin": {"maxbins": 15},
+              "title": "Age-std mortality"
+            },
+            "y": {"aggregate": "count", "title": "SA4 count"}
+          },
+          "width": 340,
+          "height": 230,
+          "title": {
+            "text": "All mortality",
+            "font": "Montserrat",
+            "fontSize": 14,
+            "anchor": "middle"
+          }
+        }
+      ]
+    }
+  ],
+  "config": {
+    "background": "#fafafa",
+    "view": {"stroke": null},
+    "axis": {
+      "labelFont": "Source Sans 3",
+      "titleFont": "Montserrat",
+      "labelFontSize": 12,
+      "titleFontSize": 13
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 860,
+  "height": 420,
+  "title": "State Totals vs National — Male, Female, Persons",
+  "data": {
+    "url": "https://raw.githubusercontent.com/Emoo0020/fit3179-dv2-life-expectancy/main/data/life_expectancy_sa4_2021_2023.csv"
+  },
+  "transform": [
+    {
+      "filter": "datum.SA4_NAME21 === 'Australia' || test(/^Total /, datum.SA4_NAME21)"
+    },
+    {"calculate": "replace(datum.SA4_NAME21, /^Total\\s+/, '')", "as": "Area"},
+    {
+      "calculate": "datum.Area === 'Australia' ? 'Australia' : datum.Area",
+      "as": "AreaClean"
+    },
+    {"calculate": "toNumber(datum.Male)", "as": "MaleNum"},
+    {"calculate": "toNumber(datum.Female)", "as": "FemaleNum"},
+    {"calculate": "toNumber(datum.Persons)", "as": "PersonsNum"},
+    {"fold": ["MaleNum", "FemaleNum", "PersonsNum"], "as": ["Group", "Years"]},
+    {"filter": "isValid(datum.Years)"}
+  ],
+  "mark": {"type": "bar"},
+  "encoding": {
+    "x": {
+      "field": "AreaClean",
+      "type": "nominal",
+      "axis": {"labelAngle": -30},
+      "title": null
+    },
+    "y": {
+      "field": "Years",
+      "type": "quantitative",
+      "title": "Life Expectancy (years)"
+    },
+    "color": {"field": "Group", "type": "nominal", "title": "Series"},
+    "tooltip": [
+      {"field": "AreaClean", "title": "Area"},
+      {"field": "Group", "title": "Series"},
+      {"field": "Years", "title": "Years", "format": ".1f"}
+    ]
+  },
+  "config": {}
+}

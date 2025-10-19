@@ -1,0 +1,97 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 740,
+  "height": 460,
+  "title": "SA4s — LE vs mortality (size=crude rate; color=median age at death)",
+  "params": [
+    {
+      "name": "leMin6",
+      "value": 78,
+      "bind": {
+        "input": "range",
+        "min": 78,
+        "max": 87,
+        "step": 0.1,
+        "name": "Min. Expectancy:"
+      }
+    },
+    {
+      "name": "leMax6",
+      "value": 86,
+      "bind": {
+        "input": "range",
+        "min": 78,
+        "max": 88,
+        "step": 0.1,
+        "name": "Max. Expectancy:"
+      }
+    },
+    {
+      "name": "mrMax6",
+      "value": 900,
+      "bind": {
+        "input": "range",
+        "min": 350,
+        "max": 950,
+        "step": 10,
+        "name": "Max. Mortality:"
+      }
+    }
+  ],
+  "data": {
+    "url": "https://raw.githubusercontent.com/Emoo0020/fit3179-dv2-life-expectancy/main/data/final_sa4_lifeexp_mortality.csv"
+  },
+  "transform": [
+    {
+      "filter": "isValid(datum.persons_LE) && isValid(datum.mort_age_std_rate_per100k) && isValid(datum.mort_crude_rate_per100k) && isValid(datum.mort_median_age)"
+    },
+    {
+      "filter": "datum.persons_LE >= leMin6 && datum.persons_LE <= leMax6 && datum.mort_age_std_rate_per100k <= mrMax6"
+    }
+  ],
+  "mark": {"type": "point", "filled": true, "opacity": 0.8},
+  "encoding": {
+    "x": {
+      "field": "persons_LE",
+      "type": "quantitative",
+      "title": "Life expectancy (yrs, persons)",
+      "scale": {"domain": [78, 87]}
+    },
+    "y": {
+      "field": "mort_age_std_rate_per100k",
+      "type": "quantitative",
+      "title": "Age-std mortality (per 100k)",
+      "scale": {"domain": [300, 1000]}
+    },
+    "size": {
+      "field": "mort_crude_rate_per100k",
+      "type": "quantitative",
+      "title": "Crude rate"
+    },
+    "color": {
+      "field": "mort_median_age",
+      "type": "quantitative",
+      "title": "Median age at death"
+    },
+    "tooltip": [
+      {"field": "SA4_name", "title": "SA4"},
+      {"field": "persons_LE", "title": "LE (persons)", "format": ".1f"},
+      {
+        "field": "mort_age_std_rate_per100k",
+        "title": "Age-std mort",
+        "format": ".0f"
+      },
+      {
+        "field": "mort_crude_rate_per100k",
+        "title": "Crude rate",
+        "format": ".0f"
+      },
+      {
+        "field": "mort_median_age",
+        "title": "Median age at death",
+        "format": ".1f"
+      }
+    ]
+  },
+  "config": {}
+}

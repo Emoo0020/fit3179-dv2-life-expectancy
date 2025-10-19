@@ -1,0 +1,63 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 820,
+  "height": 620,
+  "title": "Male vs Female Life Expectancy — Top 20 Regions (by Average)",
+  "data": {
+    "url": "https://raw.githubusercontent.com/Emoo0020/fit3179-dv2-life-expectancy/main/data/life_expectancy_sa4_2021_2023.csv"
+  },
+  "transform": [
+    {"calculate": "toNumber(datum.Average)", "as": "AvgNum"},
+    {"calculate": "toNumber(datum.Male)", "as": "MaleNum"},
+    {"calculate": "toNumber(datum.Female)", "as": "FemaleNum"},
+    {
+      "filter": "isValid(datum.AvgNum) && isValid(datum.MaleNum) && isValid(datum.FemaleNum)"
+    },
+    {
+      "window": [{"op": "rank", "as": "r"}],
+      "sort": [{"field": "AvgNum", "order": "descending"}]
+    },
+    {"filter": "datum.r <= 20"},
+    {"fold": ["MaleNum", "FemaleNum"], "as": ["Sex", "Life"]}
+  ],
+  "encoding": {
+    "y": {"field": "SA4_NAME21", "type": "nominal", "sort": "-x", "title": null}
+  },
+  "layer": [
+    {
+      "mark": {"type": "rule", "strokeWidth": 2, "opacity": 0.6},
+      "encoding": {
+        "x": {
+          "aggregate": "min",
+          "field": "Life",
+          "type": "quantitative",
+          "scale": {"domain": [82, 89]}
+        },
+        "x2": {
+          "aggregate": "max",
+          "field": "Life",
+          "type": "quantitative",
+          "scale": {"domain": [82, 89]}
+        }
+      }
+    },
+    {
+      "mark": {"type": "point", "filled": true, "size": 80},
+      "encoding": {
+        "x": {
+          "field": "Life",
+          "type": "quantitative",
+          "title": "Life Expectancy (years)",
+          "scale": {"domain": [82, 89]}
+        },
+        "color": {"field": "Sex", "type": "nominal"},
+        "tooltip": [
+          {"field": "SA4_NAME21", "title": "Region"},
+          {"field": "Sex"},
+          {"field": "Life", "title": "Years", "format": ".1f"}
+        ]
+      }
+    }
+  ],
+  "config": {}
+}
