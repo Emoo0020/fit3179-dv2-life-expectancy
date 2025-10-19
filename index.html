@@ -1,38 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FIT3179 DV2 - Life Expectancy in Australia</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FIT3179 DV2 — Life Expectancy Dashboard</title>
+
+  <!-- Vega libs -->
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
   <style>
-    body {
-      font-family: 'Montserrat', sans-serif;
-      margin: 40px;
-      background-color: #f7f7f7;
-      color: #333;
+    :root { --max: 1180px; --gap: 22px; --muted:#64748b; }
+    * { box-sizing: border-box; }
+    body{
+      margin:0; background:#f7f8fb;
+      font-family: system-ui, Segoe UI, Roboto, Helvetica, Arial;
+      color:#0f172a;
     }
-    h1 {
-      text-align: center;
-      color: #00558c;
+    .container{ max-width: var(--max); margin: 26px auto; padding: 0 16px; }
+    header{ text-align:center; margin-bottom: 18px; }
+    header h1{ margin:0 0 6px; }
+    header p{ margin:0; color:var(--muted); }
+
+    /* Section titles */
+    .section{ margin: 28px 0 10px; }
+    .title{ margin:0 0 6px; }
+    .subtitle{ margin:0 0 14px; color:var(--muted) }
+
+    /* Grid helpers */
+    .grid{ display:grid; gap: var(--gap); align-items:start; }
+    .grid.one{ grid-template-columns: 1fr; }
+    .grid.two{ grid-template-columns: 2fr 1fr; }
+    .grid.equal{ grid-template-columns: repeat(2, 1fr); }
+    .grid.three{ grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 980px){
+      .grid.two, .grid.equal, .grid.three { grid-template-columns: 1fr; }
     }
-    #map {
-      margin-top: 40px;
-      display: flex;
-      justify-content: center;
+
+    /* Cards */
+    .card{
+      background:#fff; border:1px solid #e5e7eb; border-radius:12px;
+      padding:16px; box-shadow:0 6px 18px rgba(0,0,0,.08);
+      overflow:hidden;
     }
+    .note{
+      background:#f9fafb; border:1px solid #e5e7eb; border-radius:12px;
+      padding:16px; color:#334155;
+    }
+    .card h2{ margin:0 0 10px; font-size:18px; color:#0b3d6e }
+    .vis { width:100%; } /* Vega will fit to card width */
+    .caption{ margin-top:8px; color:#6b7280; font-size:12px }
   </style>
 </head>
 <body>
+  <div class="container">
+    <header>
+      <h1>Life Expectancy in Australia — FIT3179 DV2</h1>
+      <p>Interactive idioms embedded from Vega-Lite JSON specs.</p>
+    </header>
 
-  <h1>Life Expectancy at Birth by SA4 (2021–2023)</h1>
-  <div id="map"></div>
+    <!-- A. LARGE FEATURE MAP (full width) -->
+    <section class="section">
+      <h2 class="title">Spatial Pattern of Life Expectancy</h2>
+      <p class="subtitle">Hover for details; use controls (if any) to filter.</p>
+      <div class="grid one">
+        <div class="card">
+          <!-- Put your Australia map spec here -->
+          <div class="vis" data-spec="visuals/08_state_stacked.json" data-h="520"></div>
+        </div>
+      </div>
+    </section>
 
-  <script type="text/javascript">
-    vegaEmbed('#map', 'visuals/map_life_expectancy.json', { "actions": false }).catch(console.error);
+    <!-- B. Distribution & Gaps (two columns) -->
+    <section class="section">
+      <h2 class="title">Distribution & Gender Gap</h2>
+      <div class="grid equal">
+        <div class="card">
+          <h2>01 — Histogram: Life Expectancy</h2>
+          <div class="vis" data-spec="visuals/01_histogram_life_expectancy.json" data-h="300"></div>
+        </div>
+        <div class="card">
+          <h2>02 — Coloured Histogram</h2>
+          <div class="vis" data-spec="visuals/02_coloured_histogram.json" data-h="300"></div>
+        </div>
+      </div>
+      <div class="grid one" style="margin-top:var(--gap);">
+        <div class="card">
+          <h2>03 — Dumbbell: Gender Gap by SA4</h2>
+          <!-- step sizing is best for long categorical charts -->
+          <div class="vis" data-spec="visuals/03_dumbbell_gender_gap.json" data-step="16"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- C. Relationships (wide chart + note) -->
+    <section class="section">
+      <h2 class="title">Relationships</h2>
+      <div class="grid two">
+        <div class="card">
+          <h2>05 — Regression Scatter</h2>
+          <div class="vis" data-spec="visuals/05_regression_scatter.json" data-h="360"></div>
+          <div class="caption">Relationship between selected variables and life expectancy.</div>
+        </div>
+        <aside class="note">
+          <h3>Key Observations</h3>
+          <ul>
+            <li>Use this space to summarise the pattern shown in the scatter.</li>
+            <li>Keep 2–4 bullet points; cite sources underneath if needed.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <!-- D. Top 10 & Bubble / Heatmap etc. -->
+    <section class="section">
+      <h2 class="title">Highlights & Comparisons</h2>
+      <div class="grid equal">
+        <div class="card">
+          <h2>04 — Top 10 Mortality</h2>
+          <div class="vis" data-spec="visuals/04_top10_mortality.json" data-h="320"></div>
+        </div>
+        <div class="card">
+          <h2>06 — Bubble (Multivariate)</h2>
+          <div class="vis" data-spec="visuals/06_bubble_multivariate.json" data-h="360"></div>
+        </div>
+      </div>
+      <div class="grid equal" style="margin-top:var(--gap);">
+        <div class="card">
+          <h2>07 — Brush + Link Interaction</h2>
+          <div class="vis" data-spec="visuals/07_brush_interactive.json" data-h="340"></div>
+        </div>
+        <div class="card">
+          <h2>09 — Heatmap Distribution</h2>
+          <div class="vis" data-spec="visuals/09_heatmap_distribution.json" data-h="360"></div>
+        </div>
+      </div>
+      <div class="grid one" style="margin-top:var(--gap);">
+        <div class="card">
+          <h2>10 — Gender Scatter</h2>
+          <div class="vis" data-spec="visuals/10_gender_scatter.json" data-h="340"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="section">
+      <div class="note">
+        Data paths should be relative inside each spec, e.g. <code>"url": "data/yourfile.csv"</code>.
+      </div>
+    </footer>
+  </div>
+
+  <!-- Universal embed: responsive + per-card sizing -->
+  <script>
+    const opts = { actions:false, renderer:'canvas' };
+
+    document.querySelectorAll('.vis[data-spec]').forEach(async el => {
+      const specUrl = el.dataset.spec;
+      const h = el.dataset.h ? parseInt(el.dataset.h) : null;
+      const step = el.dataset.step ? parseInt(el.dataset.step) : null;
+
+      try {
+        const spec = await fetch(specUrl).then(r => r.json());
+
+        // Make every spec responsive to its card
+        spec.width = "container";
+        spec.autosize = { type: "fit", contains: "padding" };
+
+        // Height control: step for long categorical, else fixed height
+        if (step) spec.height = { step };
+        else spec.height = h || 320;
+
+        // Helpful global axis clamps (don’t fight long labels)
+        spec.config = spec.config || {};
+        spec.config.axis = Object.assign(
+          { labelLimit: 120, titleLimit: 160 },
+          spec.config.axis || {}
+        );
+
+        await vegaEmbed(el, spec, opts);
+      } catch (err) {
+        console.error('Embed failed for', specUrl, err);
+        el.innerHTML = `<p style="color:#b91c1c">Failed to load ${specUrl}</p>`;
+      }
+    });
   </script>
-
 </body>
 </html>
