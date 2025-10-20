@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": 640,
-  "height": 500,
+  "height": 600,
   "title": "Male vs Female Life Expectancy (by region)",
   "data": {
     "url": "https://raw.githubusercontent.com/Emoo0020/fit3179-dv2-life-expectancy/main/data/life_expectancy_sa4_2021_2023.csv"
@@ -17,13 +17,13 @@
       "field": "MaleNum",
       "type": "quantitative",
       "title": "Male (years)",
-      "scale": {"domain": [72, 90]}
+      "scale": {"domain": [72, 86]}
     },
     "y": {
       "field": "FemaleNum",
       "type": "quantitative",
       "title": "Female (years)",
-      "scale": {"domain": [72, 90]}
+      "scale": {"domain": [72, 89]}
     },
     "tooltip": [
       {"field": "SA4_NAME21", "title": "Region"},

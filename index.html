@@ -77,23 +77,20 @@
     <!-- B. Distribution & Gaps (two columns) -->
     <section class="section">
       <h2 class="title">Distribution & Gender Gap</h2>
-      <div class="grid equal">
+      <div class="grid one">
         <div class="card">
-          <h2>01 — Histogram: Life Expectancy</h2>
-          <div class="vis" data-spec="visuals/01_histogram_life_expectancy.json" data-h="300"></div>
-        </div>
-        <div class="card">
-          <h2>02 — Coloured Histogram</h2>
-          <div class="vis" data-spec="visuals/02_coloured_histogram.json" data-h="300"></div>
+          <h2>01 — Coloured Histogram</h2>
+          <div class="vis" data-spec="visuals/02_coloured_histogram.json" data-h="400"></div>
         </div>
       </div>
       <div class="grid one" style="margin-top:var(--gap);">
         <div class="card">
-          <h2>03 — Dumbbell: Gender Gap by SA4</h2>
+          <h2>02 — Dumbbell: Gender Gap by SA4</h2>
           <!-- step sizing is best for long categorical charts -->
-          <div class="vis" data-spec="visuals/03_dumbbell_gender_gap.json" data-step="16"></div>
+          <div class="vis" data-spec="visuals/03_dumbbell_gender_gap.json" data-step="26"></div>
         </div>
       </div>
+      
     </section>
 
     <!-- C. Relationships (wide chart + note) -->
@@ -128,20 +125,24 @@
           <div class="vis" data-spec="visuals/06_bubble_multivariate.json" data-h="360"></div>
         </div>
       </div>
-      <div class="grid equal" style="margin-top:var(--gap);">
-        <div class="card">
-          <h2>07 — Brush + Link Interaction</h2>
-          <div class="vis" data-spec="visuals/07_brush_interactive.json" data-h="340"></div>
-        </div>
-        <div class="card">
-          <h2>09 — Heatmap Distribution</h2>
-          <div class="vis" data-spec="visuals/09_heatmap_distribution.json" data-h="360"></div>
-        </div>
-      </div>
+            <!-- 07: full width, taller -->
       <div class="grid one" style="margin-top:var(--gap);">
         <div class="card">
-          <h2>10 — Gender Scatter</h2>
-          <div class="vis" data-spec="visuals/10_gender_scatter.json" data-h="340"></div>
+          <h2>07 — Brush + Link Interaction</h2>
+          <div class="vis" data-spec="visuals/07_brush_interactive.json" data-h="580"></div>
+          <div class="caption">Brush the scatter to filter the lower histogram.</div>
+        </div>
+      </div>
+
+            <!-- 08 & 09 side-by-side -->
+      <div class="grid equal" style="margin-top:var(--gap);">
+        <div class="card">
+          <h2>08 — Heatmap Distribution</h2>
+          <div class="vis" data-spec="visuals/09_heatmap_distribution.json" data-h="360"></div>
+        </div>
+        <div class="card">
+          <h2>09 — Gender Scatter</h2>
+          <div class="vis" data-spec="visuals/10_gender_scatter.json" data-h="360"></div>
         </div>
       </div>
     </section>
