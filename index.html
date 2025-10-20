@@ -34,8 +34,12 @@
     .grid.two{ grid-template-columns: 2fr 1fr; }
     .grid.equal{ grid-template-columns: repeat(2, 1fr); }
     .grid.three{ grid-template-columns: repeat(3, 1fr); }
+
+    /* NEW: narrow-left layout (for section 07 symmetry) */
+    .grid.two-left{ grid-template-columns: 1fr 2fr; }
+
     @media (max-width: 980px){
-      .grid.two, .grid.equal, .grid.three { grid-template-columns: 1fr; }
+      .grid.two, .grid.equal, .grid.three, .grid.two-left { grid-template-columns: 1fr; }
     }
 
     /* Cards */
@@ -81,9 +85,6 @@
     <!-- A. LARGE FEATURE MAP -->
     <section class="section">
       <h2 class="title">Spatial Pattern of Life Expectancy</h2>
-      <p class="subtitle">
-        Use the window selector above the map to compare rolling 3-year periods; hover regions for details.
-      </p>
       <div class="grid one">
         <div class="card">
           <div class="vis" data-spec="visuals/map_life_expectancy_windows.json" data-h="640"></div>
@@ -95,7 +96,19 @@
     <section class="section">
       <div class="note">
         <h3>How to read this dashboard</h3>
-        <p>The map displays life expectancy by SA4 region using rolling 3-year windows to smooth short-term variations. Selecting an SA4 filters the rest of the charts. Use the window selector to switch timeframes; tooltips provide detailed values and ranks.</p>
+        <p>
+          This dashboard visualises life expectancy and mortality indicators for Australian Statistical Area Level 4 (SA4) regions from 2016 to 2023. 
+          The following key terms are used throughout:
+        </p>
+        <ul>
+          <li><strong>Life Expectancy (LE):</strong> The average number of years a newborn is expected to live if current age-specific death rates remain constant. 
+          In this dashboard, LE values are shown as <em>rolling 3-year windows</em> (e.g. 2021–2023) to smooth annual fluctuations.</li>
+          <li><strong>Crude Mortality Rate:</strong> The total number of deaths per 100,000 people in a region, unadjusted for age.</li>
+          <li><strong>Age-Standardised Mortality Rate (ASMR):</strong> Adjusts for age distribution differences across regions, enabling fair comparisons.</li>
+          <li><strong>SA4 Region:</strong> “Statistical Area Level 4” — large geographical units representing communities of 100,000+ people.</li>
+          <li><strong>Rolling 3-Year Window:</strong> A smoothing method where data are averaged over three-year periods to reduce volatility.</li>
+        </ul>
+        <p>Use the window selector below the map to compare rolling 3-year periods; hover regions for details.</p>
       </div>
     </section>
 
@@ -120,7 +133,7 @@
           <h3>Key insights — Distribution & Gender Gap (01–02)</h3>
           <ul>
             <li>Most SA4s cluster in a narrow range of life expectancy, with few outliers.</li>
-            <li>The coloured histogram shows an inverse relationship between age-standardised mortality and life expectancy.</li>
+            <li>The coloured histogram shows an inverse relationship between mortality and life expectancy.</li>
             <li>Dumbbell plots highlight the persistent gender gap — females outlive males across all regions.</li>
           </ul>
         </div>
@@ -140,7 +153,7 @@
           <h3>Key Observations</h3>
           <ul>
             <li>Regions with lower mortality or higher socioeconomic scores show higher life expectancy.</li>
-            <li>Outliers below the trend line indicate areas with poorer outcomes despite moderate socioeconomic standing.</li>
+            <li>Outliers below the trend line indicate poorer outcomes despite moderate socioeconomic standing.</li>
           </ul>
         </aside>
       </div>
@@ -160,7 +173,27 @@
         </div>
       </div>
 
-      <div class="grid one" style="margin-top:var(--gap);">
+      <!-- 07: two-column layout with narrower left (symmetry with 05) -->
+      <div class="grid two-left" style="margin-top:var(--gap);">
+        <aside class="note">
+          <h3>Key Observations</h3>
+          <ul>
+            <li>
+              Clear negative association: SA4s with higher life expectancy tend to have lower
+              <em>age-standardised mortality</em> (per 100k).
+            </li>
+            <li>
+              Use the brush on the scatter to compare the <strong>Selected mortality</strong>
+              histogram (left) against the <strong>All mortality</strong> histogram (right).
+              Clusters you brush often form tighter, lower-mortality distributions.
+            </li>
+            <li>
+              Outlying SA4s (top-left or bottom-right) warrant investigation — they deviate
+              from the overall trend.
+            </li>
+          </ul>
+        </aside>
+
         <div class="card">
           <h2>07 — Brush + Link Interaction</h2>
           <div class="vis" data-spec="visuals/07_brush_interactive.json" data-h="580"></div>
@@ -183,9 +216,9 @@
         <div class="note">
           <h3>Key insights — Highlights & Comparisons (04, 06, 09)</h3>
           <ul>
-            <li>The Top-10 chart surfaces regions performing above and below the national mortality average.</li>
-            <li>The bubble chart shows that population-heavy SA4s generally fall near mid-range outcomes.</li>
-            <li>The gender scatter closely follows the 45° line, confirming the strong male–female correlation in life expectancy.</li>
+            <li>The Top-10 chart surfaces regions performing above and below national mortality averages.</li>
+            <li>The bubble chart shows population-heavy SA4s cluster near mid-range outcomes.</li>
+            <li>The gender scatter closely follows the 45° line, confirming strong male–female correlation.</li>
           </ul>
         </div>
       </section>
@@ -258,7 +291,6 @@
       }
     });
 
-    // Footer last-edited date
     const lastEditedEl = document.getElementById('lastEdited');
     if (lastEditedEl) lastEditedEl.textContent = new Date(document.lastModified).toLocaleDateString();
   </script>
