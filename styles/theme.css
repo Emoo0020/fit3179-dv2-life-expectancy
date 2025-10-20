@@ -1,0 +1,122 @@
+/* ----------------------------------------------------------
+   FIT3179 DV2 — Theme overrides
+   Fonts, colours, cards/notes polish, subtle spacing tweaks
+-----------------------------------------------------------*/
+
+/* 1) Type: Inter for UI, Source Serif Pro for H1 (scholarly feel) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+Pro:wght@600&display=swap');
+
+:root{
+  /* Palette */
+  --bg:        #f6f8fb;
+  --ink:       #0f172a;
+  --muted:     #64748b;
+  --brand-50:  #eff6ff;
+  --brand-100: #dbeafe;
+  --brand-600: #2563eb; /* primary accent */
+  --brand-700: #1d4ed8;
+
+  --teal-50:   #ecfeff;
+  --teal-600:  #0ea5a4;
+
+  --card:      #ffffff;
+  --border:    #e6eaf1;
+  --shadow:    0 8px 28px rgba(15, 23, 42, .08);
+
+  /* Sizing */
+  --radius: 14px;
+}
+
+/* 2) Base typography & page */
+html, body {
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--ink);
+  background: var(--bg);
+}
+h1 {
+  font-family: "Source Serif Pro", Inter, serif;
+  font-weight: 600;
+  letter-spacing: .2px;
+}
+h2, h3, h4 { font-weight: 600; }
+
+/* 3) Headings look */
+header h1 { font-size: 32px; }
+header p  { color: var(--muted); }
+
+.title { 
+  font-size: 24px; 
+  font-weight: 700; 
+  color: var(--ink);
+}
+
+/* 4) Cards */
+.card{
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.card h2{
+  color: var(--brand-700);
+  margin-bottom: 12px;
+}
+
+/* 5) Notes / “Key Observations” – make them pop a bit */
+.note{
+  background: linear-gradient(180deg, var(--brand-50), #ffffff);
+  border: 1px solid var(--brand-100);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, .08);
+  color: #0b2447;
+}
+.note h3{
+  color: var(--brand-700);
+  margin-top: 0;
+}
+.note ul{
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+.note li{ 
+  margin: 8px 0; 
+  line-height: 1.35;
+}
+
+/* 6) Subtitles / captions / footer links */
+.subtitle, .caption { color: var(--muted); }
+.footer-links a { color: var(--brand-600); }
+.footer-links a:hover { color: var(--brand-700); text-decoration: underline; }
+
+/* 7) Subtle tweaks to spacing for dense sections */
+.section { margin: 30px 0 12px; }
+.container { padding-bottom: 18px; }
+
+/* 8) Optional chips/badges (if you want to label filters or notes inline) */
+.badge{
+  display:inline-block;
+  padding:.15rem .5rem;
+  border-radius:999px;
+  background: var(--teal-50);
+  color: var(--teal-600);
+  border: 1px solid rgba(14,165,164,.25);
+  font-size: 12px;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+/* 9) Make small screens comfy */
+@media (max-width: 980px){
+  header h1 { font-size: 26px; }
+  .title { font-size: 20px; }
+}
+
+/* Ensure all note bullet points are solid like the others */
+.note ul li {
+    list-style-type: disc;
+  }
+  
+  .note ul {
+    padding-left: 18px; /* keeps alignment consistent */
+  }
+  
