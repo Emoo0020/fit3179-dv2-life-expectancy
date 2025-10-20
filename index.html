@@ -29,7 +29,7 @@
     .subtitle{ margin:0 0 14px; color:var(--muted) }
 
     /* Grid helpers */
-    .grid{ display:grid; gap: var(--gap); align-items:start; }
+    .grid{ display:grid; gap: var(--gap); align-items: stretch; }
     .grid.one{ grid-template-columns: 1fr; }
     .grid.two{ grid-template-columns: 2fr 1fr; }
     .grid.equal{ grid-template-columns: repeat(2, 1fr); }
@@ -43,14 +43,32 @@
       background:#fff; border:1px solid #e5e7eb; border-radius:12px;
       padding:16px; box-shadow:0 6px 18px rgba(0,0,0,.08);
       overflow:hidden;
+      display:flex; flex-direction:column;
     }
     .note{
       background:#f9fafb; border:1px solid #e5e7eb; border-radius:12px;
       padding:16px; color:#334155;
     }
     .card h2{ margin:0 0 10px; font-size:18px; color:#0b3d6e }
-    .vis { width:100%; } /* Vega will fit to card width */
+    .vis { width:100%; flex:1; }
     .caption{ margin-top:8px; color:#6b7280; font-size:12px }
+
+    /* Footer styles */
+    .footer-wrap{ margin-top: 28px; text-align: center; }
+    .footer-hr{ border: none; border-top:1px solid #e5e7eb; margin:16px 0 18px; }
+    .footer-meta{ margin:0 0 6px; font-weight:600; color:#0f172a; }
+    .footer-links a{ color:#0b3d6e; text-decoration:none; }
+    .footer-links a:hover{ text-decoration:underline; }
+    .footer-note{
+      margin:14px auto 0; max-width: var(--max);
+      background:#f9fafb; border:1px solid #e5e7eb; border-radius:12px;
+      padding:14px; color:#334155; text-align:left;
+    }
+    .footer-note h4{ margin:0 0 8px; color:#0b3d6e }
+    .footer-cols{ display:grid; grid-template-columns: 1.1fr 1fr; gap:16px; align-items:start; }
+    @media (max-width: 980px){ .footer-cols{ grid-template-columns:1fr; } }
+    .footer-note ul{ margin:6px 0 0; padding-left:18px; }
+    .footer-small{ color:#64748b; font-size:12px; margin-top:10px; }
   </style>
 </head>
 <body>
@@ -60,7 +78,7 @@
       <p>Interactive idioms embedded from Vega-Lite JSON specs.</p>
     </header>
 
-    <!-- A. LARGE FEATURE MAP (full width) -->
+    <!-- A. LARGE FEATURE MAP -->
     <section class="section">
       <h2 class="title">Spatial Pattern of Life Expectancy</h2>
       <p class="subtitle">
@@ -71,10 +89,17 @@
           <div class="vis" data-spec="visuals/map_life_expectancy_windows.json" data-h="640"></div>
         </div>
       </div>
-      
     </section>
 
-    <!-- B. Distribution & Gaps (two columns) -->
+    <!-- Overview Note -->
+    <section class="section">
+      <div class="note">
+        <h3>How to read this dashboard</h3>
+        <p>The map displays life expectancy by SA4 region using rolling 3-year windows to smooth short-term variations. Selecting an SA4 filters the rest of the charts. Use the window selector to switch timeframes; tooltips provide detailed values and ranks.</p>
+      </div>
+    </section>
+
+    <!-- B. Distribution & Gaps -->
     <section class="section">
       <h2 class="title">Distribution & Gender Gap</h2>
       <div class="grid one">
@@ -86,14 +111,23 @@
       <div class="grid one" style="margin-top:var(--gap);">
         <div class="card">
           <h2>02 — Dumbbell: Gender Gap by SA4</h2>
-          <!-- step sizing is best for long categorical charts -->
           <div class="vis" data-spec="visuals/03_dumbbell_gender_gap.json" data-step="26"></div>
         </div>
       </div>
-      
+
+      <section class="section">
+        <div class="note">
+          <h3>Key insights — Distribution & Gender Gap (01–02)</h3>
+          <ul>
+            <li>Most SA4s cluster in a narrow range of life expectancy, with few outliers.</li>
+            <li>The coloured histogram shows an inverse relationship between age-standardised mortality and life expectancy.</li>
+            <li>Dumbbell plots highlight the persistent gender gap — females outlive males across all regions.</li>
+          </ul>
+        </div>
+      </section>
     </section>
 
-    <!-- C. Relationships (wide chart + note) -->
+    <!-- C. Relationships -->
     <section class="section">
       <h2 class="title">Relationships</h2>
       <div class="grid two">
@@ -105,27 +139,27 @@
         <aside class="note">
           <h3>Key Observations</h3>
           <ul>
-            <li>Use this space to summarise the pattern shown in the scatter.</li>
-            <li>Keep 2–4 bullet points; cite sources underneath if needed.</li>
+            <li>Regions with lower mortality or higher socioeconomic scores show higher life expectancy.</li>
+            <li>Outliers below the trend line indicate areas with poorer outcomes despite moderate socioeconomic standing.</li>
           </ul>
         </aside>
       </div>
     </section>
 
-    <!-- D. Top 10 & Bubble / Heatmap etc. -->
+    <!-- D. Highlights & Comparisons -->
     <section class="section">
       <h2 class="title">Highlights & Comparisons</h2>
       <div class="grid equal">
         <div class="card">
           <h2>04 — Top 10 Mortality</h2>
-          <div class="vis" data-spec="visuals/04_top10_mortality.json" data-h="320"></div>
+          <div class="vis" data-spec="visuals/04_top10_mortality.json" data-h="380"></div>
         </div>
         <div class="card">
           <h2>06 — Bubble (Multivariate)</h2>
-          <div class="vis" data-spec="visuals/06_bubble_multivariate.json" data-h="360"></div>
+          <div class="vis" data-spec="visuals/06_bubble_multivariate.json" data-h="380"></div>
         </div>
       </div>
-            <!-- 07: full width, taller -->
+
       <div class="grid one" style="margin-top:var(--gap);">
         <div class="card">
           <h2>07 — Brush + Link Interaction</h2>
@@ -134,7 +168,6 @@
         </div>
       </div>
 
-            <!-- 08 & 09 side-by-side -->
       <div class="grid equal" style="margin-top:var(--gap);">
         <div class="card">
           <h2>08 — Heatmap Distribution</h2>
@@ -145,16 +178,60 @@
           <div class="vis" data-spec="visuals/10_gender_scatter.json" data-h="360"></div>
         </div>
       </div>
+
+      <section class="section">
+        <div class="note">
+          <h3>Key insights — Highlights & Comparisons (04, 06, 09)</h3>
+          <ul>
+            <li>The Top-10 chart surfaces regions performing above and below the national mortality average.</li>
+            <li>The bubble chart shows that population-heavy SA4s generally fall near mid-range outcomes.</li>
+            <li>The gender scatter closely follows the 45° line, confirming the strong male–female correlation in life expectancy.</li>
+          </ul>
+        </div>
+      </section>
     </section>
 
-    <footer class="section">
-      <div class="note">
-        Data paths should be relative inside each spec, e.g. <code>"url": "data/yourfile.csv"</code>.
+    <!-- Footer -->
+    <footer class="section footer-wrap">
+      <hr class="footer-hr">
+      <p class="footer-meta">
+        This visualisation is for <strong>FIT3179 – Data Visualisation (DV2)</strong> and was created by
+        <strong>Ethan Moore</strong>. Last edited on <span id="lastEdited">—</span>.
+      </p>
+      <p class="footer-links" style="margin:0 0 10px;">
+        <a href="https://github.com/emoo0020/fit3179-dv2-life-expectancy" target="_blank" rel="noopener">GitHub repository</a>
+      </p>
+
+      <div class="footer-note">
+        <div class="footer-cols">
+          <div>
+            <h4>Data Sources</h4>
+            <ul>
+              <li>ABS Life Tables by SA4 (persons/male/female), rolling windows 2016–2023.</li>
+              <li>ABS Age-standardised Mortality (per 100k), 2016–2023.</li>
+              <li>AIHW (Australian Institute of Health and Welfare) National Mortality Database, 2016–2023.</li>
+              <li>ABS Estimated Resident Population (ERP) – SA4 (for bubble sizing / rates).</li>
+              <li>ABS ASGS 2021 – SA4 boundaries (TopoJSON derived).</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Methods & Notes</h4>
+            <ul>
+              <li>Life expectancy shown as <em>rolling 3-year windows</em> to smooth volatility.</li>
+              <li>Map uses Mercator projection with tuned <code>scale</code>/<code>center</code> to include Tasmania.</li>
+              <li>Interactions: SA4 selection (map → charts), window selector, histogram brush.</li>
+              <li>Units: years / per 100k; benchmark rules show national averages.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-small">
+          Built with Vega-Lite v5 and vega-embed v6. ABS and AIHW data © Commonwealth of Australia – Creative Commons BY 4.0. Any processing errors are my own.
+        </div>
       </div>
     </footer>
   </div>
 
-  <!-- Universal embed: responsive + per-card sizing -->
+  <!-- Vega embedding -->
   <script>
     const opts = { actions:false, renderer:'canvas' };
 
@@ -165,28 +242,25 @@
 
       try {
         const spec = await fetch(specUrl).then(r => r.json());
-
-        // Make every spec responsive to its card
         spec.width = "container";
         spec.autosize = { type: "fit", contains: "padding" };
-
-        // Height control: step for long categorical, else fixed height
         if (step) spec.height = { step };
         else spec.height = h || 320;
-
-        // Helpful global axis clamps (don’t fight long labels)
         spec.config = spec.config || {};
         spec.config.axis = Object.assign(
           { labelLimit: 120, titleLimit: 160 },
           spec.config.axis || {}
         );
-
         await vegaEmbed(el, spec, opts);
       } catch (err) {
         console.error('Embed failed for', specUrl, err);
         el.innerHTML = `<p style="color:#b91c1c">Failed to load ${specUrl}</p>`;
       }
     });
+
+    // Footer last-edited date
+    const lastEditedEl = document.getElementById('lastEdited');
+    if (lastEditedEl) lastEditedEl.textContent = new Date(document.lastModified).toLocaleDateString();
   </script>
 </body>
 </html>
