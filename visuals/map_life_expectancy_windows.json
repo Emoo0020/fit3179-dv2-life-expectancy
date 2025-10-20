@@ -27,7 +27,7 @@
       }
     }
   ],
-  "projection": { "type": "mercator", "center": [133, -27], "scale": 900 },
+  "projection": { "type": "mercator", "center": [133, -28], "scale": 810 },
   "width": "container",
   "height": 640,
   "autosize": { "type": "fit", "contains": "padding" },
