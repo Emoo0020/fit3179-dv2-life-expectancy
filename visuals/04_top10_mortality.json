@@ -31,5 +31,9 @@
       {"field": "persons_LE", "title": "LE (persons)", "format": ".1f"}
     ]
   },
-  "config": {}
+  "autosize": { "type": "fit", "contains": "padding" },
+  "config": {
+    "axis": { "labelLimit": 120, "titleLimit": 200, "titlePadding": 10 }
+  }
+
 }

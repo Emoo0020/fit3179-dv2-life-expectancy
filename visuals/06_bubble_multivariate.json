@@ -93,5 +93,9 @@
       }
     ]
   },
-  "config": {}
+  "config": {
+  "legend": { "orient": "bottom", "padding": 10 },
+  "axis": { "labelLimit": 120, "titleLimit": 160 }
+}
+
 }
